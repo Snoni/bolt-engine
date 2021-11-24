@@ -24,6 +24,10 @@ class ClientPrefs {
 	public static var imagesPersist:Bool = false;
 	public static var ghostTapping:Bool = true;
 	public static var hideTime:Bool = false;
+	public static var iconbounce:Bool = true;
+	public static var verthealthbar:Bool = false;
+	public static var iconcorner:Bool = false;
+	public static var goldnotes:Bool = true;
 
 	//Every key has two binds, these binds are defined on defaultKeys! If you want your control to be changeable, you have to add it on ControlsSubState (inside OptionsState.hx)'s list
 	public static var keyBinds:Map<String, Dynamic> = new Map<String, Dynamic>();
@@ -71,10 +75,14 @@ class ClientPrefs {
 		FlxG.save.data.hideTime = hideTime;
 		FlxG.save.data.achievementsMap = Achievements.achievementsMap;
 		FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
+		FlxG.save.data.verthealthbar = verthealthbar;
+		FlxG.save.data.iconbounce = iconbounce;
+		FlxG.save.data.iconcorner = iconcorner;
+		FlxG.save.data.goldnotes = goldnotes;
 		FlxG.save.flush();
 
 		var save:FlxSave = new FlxSave();
-		save.bind('controls_v2', 'ninjamuffin99'); //Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
+		save.bind('bolt_engine', 'bolt team'); //Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
 		save.data.customControls = keyBinds;
 		save.flush();
 		FlxG.log.add("Settings saved!");
@@ -142,6 +150,18 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.hideTime != null) {
 			hideTime = FlxG.save.data.hideTime;
+		}
+		if(FlxG.save.data.verthealthbar != null) {
+			verthealthbar = FlxG.save.data.verthealthbar;
+		}
+		if(FlxG.save.data.iconbounce != null) {
+			iconbounce = FlxG.save.data.iconbounce;
+		}
+		if(FlxG.save.data.iconcorner != null) {
+			iconcorner = FlxG.save.data.iconcorner;
+		}
+		if(FlxG.save.data.goldnotes != null) {
+			goldnotes = FlxG.save.data.goldnotes;
 		}
 
 		var save:FlxSave = new FlxSave();

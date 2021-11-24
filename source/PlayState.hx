@@ -62,16 +62,16 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['You Suck!', 0.2], //From 0% to 19%
-		['Shit', 0.4], //From 20% to 39%
-		['Bad', 0.5], //From 40% to 49%
-		['Bruh', 0.6], //From 50% to 59%
-		['Meh', 0.69], //From 60% to 68%
-		['Nice', 0.7], //69%
-		['Good', 0.8], //From 70% to 79%
-		['Great', 0.9], //From 80% to 89%
-		['Sick!', 1], //From 90% to 99%
-		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+		[':(', 0.2],
+		[':|', 0.4], //From 20% to 39%
+		['cmon dude', 0.5], //From 40% to 49%
+		['brrrrrrrr', 0.6], //From 50% to 59%
+		['you can do better', 0.69], //From 60% to 68%
+		['mmmmmmmmmmmmmm', 0.7], //69%
+		["yesn't", 0.8], //From 70% to 79%
+		['yes', 0.9], //From 80% to 89%
+		['MMMMMMMMMMMMMMMM', 1], //From 90% to 99%
+		['MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 	
 	#if (haxe >= "4.0.0")
@@ -150,6 +150,7 @@ class PlayState extends MusicBeatState
 
 	private var healthBarBG:AttachedSprite;
 	public var healthBar:FlxBar;
+	public var starbar:FlxBar;
 	var songPercent:Float = 0;
 
 	private var timeBarBG:AttachedSprite;
@@ -889,6 +890,15 @@ class PlayState extends MusicBeatState
 		iconP2.visible = !ClientPrefs.hideHud;
 		add(iconP2);
 		reloadHealthBarColors();
+
+		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
+			'health', 0, 2);
+		healthBar.scrollFactor.set();
+		// healthBar
+		healthBar.visible = !ClientPrefs.hideHud;
+		add(healthBar);
+
+		starbar = new FlxBar(10, 10, LEFT_TO_RIGHT, 200, FlxG.height - 100, this, starbarscore, )
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -3039,6 +3049,7 @@ class PlayState extends MusicBeatState
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
+		var sbscore:Int = .875;
 
 		var daRating:String = "sick";
 
@@ -3046,16 +3057,19 @@ class PlayState extends MusicBeatState
 		{
 			daRating = 'shit';
 			score = 50;
+			sbscore = .0125;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.5)
 		{
 			daRating = 'bad';
 			score = 100;
+			sbscore = .25;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.25)
 		{
 			daRating = 'good';
 			score = 200;
+			sbscore = .50;
 		}
 
 		if(daRating == 'sick' && !note.noteSplashDisabled)
@@ -3065,6 +3079,7 @@ class PlayState extends MusicBeatState
 
 		if(!practiceMode && !cpuControlled) {
 			songScore += score;
+			starbarscore += sbscore;
 			songHits++;
 			RecalculateRating();
 			if(scoreTxtTween != null) {

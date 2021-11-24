@@ -705,7 +705,12 @@ class PreferencesSubstate extends MusicBeatSubstate
 	private static var curSelected:Int = 0;
 	static var unselectableOptions:Array<String> = [
 		'GRAPHICS',
-		'GAMEPLAY'
+		'GAMEPLAY',
+		'HUD',
+		'No Icons',
+		'Shake Icon On Miss',
+		'Icon Bouncing',
+		'Perspective Healthbar'
 	];
 	static var noCheckbox:Array<String> = [
 		'Framerate',
@@ -729,7 +734,16 @@ class PreferencesSubstate extends MusicBeatSubstate
 		'Hide HUD',
 		'Hide Song Length',
 		'Flashing Lights',
-		'Camera Zooms'
+		'Camera Zooms',
+		'Disable Gold Notes',
+		'HUD',
+		'Vertical Healthbar',
+		'Icons In Corner',
+		'No Icons',
+		'Shake Icon On Miss',
+		'Icon Bouncing',
+		'Perspective Healthbar',
+		'Disable Star Bar'
 		#if !mobile
 		,'FPS Counter'
 		#end
@@ -917,6 +931,15 @@ class PreferencesSubstate extends MusicBeatSubstate
 					
 					case 'Hide Song Length':
 						ClientPrefs.hideTime = !ClientPrefs.hideTime;
+					// HUD
+					case 'Vertical Healthbar':
+						ClientPrefs.verthealthbar = !ClientPrefs.verthealthbar;
+
+					case 'Icons In Corner':
+						ClientPrefs.iconcorner = !ClientPrefs.iconcorner;
+
+					case 'Disable Gold Notes':
+						ClientPrefs.goldnotes = !ClientPrefs.goldnotes;
 				}
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				reloadValues();
