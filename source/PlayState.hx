@@ -116,6 +116,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
+	public static var starbarscore:Int = 0;
 
 	public var vocals:FlxSound;
 
@@ -171,6 +172,7 @@ class PlayState extends MusicBeatState
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 	public var camHUD:FlxCamera;
+	public var camStars:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
@@ -262,12 +264,14 @@ class PlayState extends MusicBeatState
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
+		camStars = new FlxCamera();
 		camOther = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
+		FlxG.cameras.add(camStars);
 		FlxG.cameras.add(camOther);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
@@ -898,7 +902,10 @@ class PlayState extends MusicBeatState
 		healthBar.visible = !ClientPrefs.hideHud;
 		add(healthBar);
 
-		starbar = new FlxBar(10, 10, LEFT_TO_RIGHT, 200, FlxG.height - 100, this, starbarscore, )
+		starbar = new FlxBar(10, 10, LEFT_TO_RIGHT, 200, FlxG.height - 100, this, 'starbarscore', 0, 140);
+		starbar.scrollFactor.set();
+		starbar.visible = !ClientPrefs.hideHud;
+		add(starbar);
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -918,6 +925,7 @@ class PlayState extends MusicBeatState
 		}
 
 		strumLineNotes.cameras = [camHUD];
+		starbar.cameras = [camStars];
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -1966,6 +1974,23 @@ class PlayState extends MusicBeatState
 			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingString + ' (' + Math.floor(ratingPercent * 100) + '%)';
 		}
 
+		// sorry
+		if(starbar.percent >= 20) {
+
+		} else if(starbar.percent >= 40) {
+
+		} else if(starbar.percent >= 60) {
+
+		} else if(starbar.percent >= 80) {
+
+		} else if(starbar.percent >= 100) {
+
+		} else if(starbar.percent >= 120) {
+
+		} else if(starbar.percent >= 140) {
+
+		}
+
 		if(cpuControlled) {
 			botplaySine += 180 * elapsed;
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
@@ -2097,6 +2122,7 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
+			camStars.zoom = FlxMath.lerp(1, camStars.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -3797,6 +3823,10 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
+			camStars += 0.1;
+		}
+		if(camZooming && ClientPrefs.goldnotes && curBeat % 2 == 0) {
+			camStars += 0.05;
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
