@@ -116,7 +116,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
-	public static var starbarscore:Int = 0;
+	public static var starbarscore:Float = 0;
 
 	public var vocals:FlxSound;
 
@@ -172,7 +172,6 @@ class PlayState extends MusicBeatState
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 	public var camHUD:FlxCamera;
-	public var camStars:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
@@ -264,14 +263,12 @@ class PlayState extends MusicBeatState
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
-		camStars = new FlxCamera();
 		camOther = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
-		FlxG.cameras.add(camStars);
 		FlxG.cameras.add(camOther);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
@@ -895,17 +892,11 @@ class PlayState extends MusicBeatState
 		add(iconP2);
 		reloadHealthBarColors();
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
-		healthBar.scrollFactor.set();
-		// healthBar
-		healthBar.visible = !ClientPrefs.hideHud;
-		add(healthBar);
-
-		starbar = new FlxBar(10, 10, LEFT_TO_RIGHT, 200, FlxG.height - 100, this, 'starbarscore', 0, 140);
+		starbar = new FlxBar(15, 15, LEFT_TO_RIGHT, 100, FlxG.height - 150, this, 'health', 0, 140, true);
 		starbar.scrollFactor.set();
 		starbar.visible = !ClientPrefs.hideHud;
 		add(starbar);
+		updateStarBar();
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -925,7 +916,7 @@ class PlayState extends MusicBeatState
 		}
 
 		strumLineNotes.cameras = [camHUD];
-		starbar.cameras = [camStars];
+		starbar.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -1050,6 +1041,11 @@ class PlayState extends MusicBeatState
 		
 		
 		super.create();
+	}
+
+	public function updateStarBar() {
+		starbar.createFilledBar(0xFF0000FF, 0xFF000080, true, 0xFFFFFFFF);
+		starbar.updateBar();
 	}
 
 	public function addTextToDebug(text:String) {
@@ -2122,7 +2118,6 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
-			camStars.zoom = FlxMath.lerp(1, camStars.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -2782,6 +2777,7 @@ class PlayState extends MusicBeatState
 						}
 				}
 				reloadHealthBarColors();
+				updateStarBar();
 			
 			case 'BG Freaks Expression':
 				if(bgGirls != null) bgGirls.swapDanceType();
@@ -3075,7 +3071,7 @@ class PlayState extends MusicBeatState
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
-		var sbscore:Int = .875;
+		var sbscore:Float = .875;
 
 		var daRating:String = "sick";
 
@@ -3484,6 +3480,8 @@ class PlayState extends MusicBeatState
 				if(combo > 9999) combo = 9999;
 			}
 			health += note.hitHealth;
+			starbarscore += 20;
+
 
 			if(!note.noAnimation) {
 				var daAlt = '';
@@ -3823,10 +3821,6 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
-			camStars += 0.1;
-		}
-		if(camZooming && ClientPrefs.goldnotes && curBeat % 2 == 0) {
-			camStars += 0.05;
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));

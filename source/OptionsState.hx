@@ -30,7 +30,7 @@ using StringTools;
 // TO DO: Redo the menu creation system for not being as dumb
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Notes', 'Controls', 'Preferences'];
+	var options:Array<String> = ['Notes', 'Controls', 'Preferences', 'Extra Gameplay'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -708,12 +708,7 @@ class PreferencesSubstate extends MusicBeatSubstate
 	private static var curSelected:Int = 0;
 	static var unselectableOptions:Array<String> = [
 		'GRAPHICS',
-		'GAMEPLAY',
-		'HUD',
-		'No Icons',
-		'Shake Icon On Miss',
-		'Icon Bouncing',
-		'Perspective Healthbar'
+		'GAMEPLAY'
 	];
 	static var noCheckbox:Array<String> = [
 		'Framerate',
@@ -737,16 +732,7 @@ class PreferencesSubstate extends MusicBeatSubstate
 		'Hide HUD',
 		'Hide Song Length',
 		'Flashing Lights',
-		'Camera Zooms',
-		'Disable Gold Notes',
-		'HUD',
-		'Vertical Healthbar',
-		'Icons In Corner',
-		'No Icons',
-		'Shake Icon On Miss',
-		'Icon Bouncing',
-		'Perspective Healthbar',
-		'Disable Star Bar'
+		'Camera Zooms'
 		#if !mobile
 		,'FPS Counter'
 		#end
@@ -934,15 +920,6 @@ class PreferencesSubstate extends MusicBeatSubstate
 					
 					case 'Hide Song Length':
 						ClientPrefs.hideTime = !ClientPrefs.hideTime;
-					// HUD
-					case 'Vertical Healthbar':
-						ClientPrefs.verthealthbar = !ClientPrefs.verthealthbar;
-
-					case 'Icons In Corner':
-						ClientPrefs.iconcorner = !ClientPrefs.iconcorner;
-
-					case 'Disable Gold Notes':
-						ClientPrefs.goldnotes = !ClientPrefs.goldnotes;
 				}
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				reloadValues();
@@ -1382,7 +1359,6 @@ class ExtraSubstate extends MusicBeatSubstate
 			}
 		}
 
-		showCharacter.visible = (options[curSelected] == 'Anti-Aliasing');
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 
@@ -1392,34 +1368,12 @@ class ExtraSubstate extends MusicBeatSubstate
 			if(checkbox != null) {
 				var daValue:Bool = false;
 				switch(options[checkboxNumber[i]]) {
-					case 'FPS Counter':
-						daValue = ClientPrefs.showFPS;
-					case 'Low Quality':
-						daValue = ClientPrefs.lowQuality;
-					case 'Anti-Aliasing':
-						daValue = ClientPrefs.globalAntialiasing;
-					case 'Note Splashes':
-						daValue = ClientPrefs.noteSplashes;
-					case 'Flashing Lights':
-						daValue = ClientPrefs.flashing;
-					case 'Downscroll':
-						daValue = ClientPrefs.downScroll;
-					case 'Middlescroll':
-						daValue = ClientPrefs.middleScroll;
-					case 'Ghost Tapping':
-						daValue = ClientPrefs.ghostTapping;
-					case 'Swearing':
-						daValue = ClientPrefs.cursing;
-					case 'Violence':
-						daValue = ClientPrefs.violence;
-					case 'Camera Zooms':
-						daValue = ClientPrefs.camZooms;
-					case 'Hide HUD':
-						daValue = ClientPrefs.hideHud;
-					case 'Persistent Cached Data':
-						daValue = ClientPrefs.imagesPersist;
-					case 'Hide Song Length':
-						daValue = ClientPrefs.hideTime;
+					case 'Vertical Healthbar':
+						daValue = ClientPrefs.verthealthbar;
+					case 'Icons In Corner':
+						daValue = ClientPrefs.iconcorner;
+					case 'Disable Gold Notes':
+						daValue = ClientPrefs.goldnotes;
 				}
 				checkbox.daValue = daValue;
 			}
